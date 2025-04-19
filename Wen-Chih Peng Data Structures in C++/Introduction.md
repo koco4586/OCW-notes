@@ -12,6 +12,9 @@
     - Bottom-up.
 3. Design:
 
-    The creation of abstract data type (ADT) and specification of alogrithms.
+    The creation of abstract data type (ADT) and specification of algorithms.
 4. Refinement and coding.
 5. Verification.
+# Algorithm criteria
+
+# Object-Oriented Programming

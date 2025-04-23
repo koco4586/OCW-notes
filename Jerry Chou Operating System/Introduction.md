@@ -21,7 +21,8 @@
     -  OS code cannot allow any bug.
     -  OS and computer architecture influence each other.
 # Interrupt I/O
--  Busy/wait is very inefficient
+-  Busy/wait is very inefficient![image](https://github.com/user-attachments/assets/5a9e1955-e4cf-436f-bc43-67eca63370b1)
+
     - CPU cannot do other work while testing device.
     - Hard to do simultaneous I/O.
 -  **Interrupts** allow a device to change the flow of control in the CPU.

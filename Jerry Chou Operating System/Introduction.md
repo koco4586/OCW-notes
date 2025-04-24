@@ -35,4 +35,30 @@
     - Interrupt transfers control to the *interrupt service routine* (ISR) generally, through the interrupt vector (or switch case), which contains the addresses (function pointer) of all the service routines.
     - Interrupt architecture must save the *address* of the interrupted instruction.
     - Incoming interrupts are *disabled* while another interrupt is being processed to prevent a *lost interrupt*.
+# Storage hierarchy
+- ![image](https://github.com/user-attachments/assets/e7ae2a4e-73da-47c2-98d5-afd3c5d9c561)
+
+- ![image](https://github.com/user-attachments/assets/dc67725f-e99c-4022-a934-29397c531581)
+# Cache coherence 
+- The following are the requirements for cache coherence:
+    -  Write Propagation:
+Changes to the data in any cache must be propagated to other copies (of that cache line) in the peer caches.
+    - Transaction Serialization:
+Reads/Writes to a single memory location must be seen by all processors in the same order.
+- ![image](https://github.com/user-attachments/assets/47857840-be4b-4de5-9f85-5405d7f5210a)
+- MESI protocol:
+
+| State | Full Name  | Meaning   | Description                                                                |
+|-------|------------|-----------|----------------------------------------------------------------------------|
+| M     | Modified   | Changed   | The cache line is modified and only exists in this cache. Memory is stale. |
+| E     | Exclusive  | Owned     | The cache has the only copy. It matches main memory.                       |
+| S     | Shared     | Unchanged | Multiple caches may have the same, unmodified copy.                       |
+| I     | Invalid    | Not usable| The cache line is invalid and must be reloaded from memory or another cache.|
+- The State Transitions ![image](https://github.com/user-attachments/assets/8dbe14c5-dee4-41ce-bbac-1dc8f64da4d0)
+
+
+
+
+
+
 

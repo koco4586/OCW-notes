@@ -54,9 +54,39 @@ Reads/Writes to a single memory location must be seen by all processors in the s
 | E     | Exclusive  | Owned     | The cache has the only copy. It matches main memory.                       |
 | S     | Shared     | Unchanged | Multiple caches may have the same, unmodified copy.                       |
 | I     | Invalid    | Not usable| The cache line is invalid and must be reloaded from memory or another cache.|
-- The State Transitions ![image](https://github.com/user-attachments/assets/8dbe14c5-dee4-41ce-bbac-1dc8f64da4d0)
-
-
+- The State Transitions: ![image](https://github.com/user-attachments/assets/8dbe14c5-dee4-41ce-bbac-1dc8f64da4d0)
+# Hardware protection
+- Dual-Mode Operation
+    - Provide hardware support to differentiate between two modes of operations:
+        - **User mode**: execution done on behalf of a user.
+        - **Monitor mode (kernel mode)**: execution done on behalf of OS.
+    - Mode bit added to computer hardware to indicate the current mode: kernel (0) or user (1).
+    - When an interrupt/trap or fault occurs, hardware switches to monitor mode.
+    - **Privileged instructions**:
+        - Executed only in monitor mode.
+        - Requested by users (system calls). 
+- I/O Protection
+    - ALL I/O instuctions are privileged instructions.
+    - Must ensure that a user program could never gain control of the computer in monitor mode.  
+- Memory Protection
+    - Protect:
+        - Interrupt vector and the ISR.
+        - Data access and over-write from other programs.
+    - HW support two registers for legal address determination:
+        - **Base register**: holds the smallest legal physical memory address.
+        - **Limit register**: contains the size of the range.
+    - Memory outside the defined range is protected.
+    - Hardware address protection: ![image](https://github.com/user-attachments/assets/0881cebb-94c8-400b-ba5c-4fe4f747f210)
+ 
+- CPU Protection
+    - Prevent user program from not returning control.
+        - getting stuck in an infinite loop.
+        - not calling system services.
+    - HW support: **Timer** interrupts computer after specified period
+        - Timer is decremented every clock tick.
+        - When timer reaches value 0, an interrupt occurs.   
+    - Timer commonly used to implement time sharing
+    - **Load-timer(overwrite)** is a privileged instruction.
 
 
 

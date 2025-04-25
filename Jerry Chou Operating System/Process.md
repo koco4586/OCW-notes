@@ -67,6 +67,27 @@
   - **Long-term** scheduler (*job scheduler*): selects processes should be **loaded into memory** and brought into the ready queue (determine New state to Ready state).
     - Control **degree of multiprogramming**.
     - Select a **good mix of CPU-bound & I/O bound** processes to increase system overall performance.
-- Most modern OS skip the long-term schedulers due to having sufficient physical memory.   
-    
+    - Most modern OS skip the long-term schedulers due to having sufficient physical memory.   
+# Process creation
+- Resource sharing
+  - Parent and child process share **all** resources.
+  - Child process shares **subset** of parent's resources.
+  - Parent and child share **no** resources. 
+- Execution
+  - Parent and child process **execute concurrently**.
+  - Parent **wait until children terminate**.
+- Address space
+  - **Child duplicate of parent**, communication via sharing variables.
+  - **Child has a program loaded into it**, communication via message passing.
+- UNIX/Linux Process Creation
+  - *fork()* system call:
+    - Create a new (child) process.
+    - The new (child) process **duplicates the address space** of its parent.
+    - Child and Parent **execute concurrently** after fork.
+    - Child: return value of *fork()* is 0.
+    - Parent: return value of *fork()* is PID of the child process.
+  - *execlp()* system call:
+    - **Load a new binary file** into memory, **destroying the old code**. 
+  - *wait()* system call:
+    - The parent waits for **one of its child processes** to complete.   
     

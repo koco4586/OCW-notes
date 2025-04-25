@@ -56,4 +56,17 @@
   - **Job queue** (New state): set of all processes in the system.
   - **Ready queue** (Ready state): set of all processes residing in main memory, *ready and waiting to execute*.
   - **Device queue** (Wait State): set of processes *waiting for an I/O device*.
-  
+- Process scheduling diagram: ![image](https://github.com/user-attachments/assets/2376ca7e-3395-4fa7-970c-8a02c640757a)
+- Schedulers:
+  - **Short-term** scheduler (*CPU scheduler*): selects which process should be executed and **allocated CPU** (determine Ready state to Run state).
+    - Execute quite frequently (milliseconds-level).
+    - Must be efficient to reduce overhead.
+  -**Medium-term** scheduler: selects which processes should be **swapped in/out memory** (determine Ready state to Wait state).
+    - Improve process mix, free up memory.
+    - Most modern OS skip the medium-term schedulers due to using virtual memory.   
+  - **Long-term** scheduler (*job scheduler*): selects processes should be **loaded into memory** and brought into the ready queue (determine New state to Ready state).
+    - Control **degree of multiprogramming**.
+    - Select a **good mix of CPU-bound & I/O bound** processes to increase system overall performance.
+- Most modern OS skip the long-term schedulers due to having sufficient physical memory.   
+    
+    

@@ -43,3 +43,28 @@
   - Store the parameters in a table in memory, and pass the table address as a parameter (pointer) in a register.
   -  Push the parameters onto a stack; to be popped off by the OS. Block and stack
 methods do not limitt the number or length of parameters passed.
+# Layered OS Architecture
+- Lower levels independent of upper levels.
+  - N<sup>th</sup> layer can only acess services provided by 0 ~ (N-1)<sup>th</sup> layer.
+- ![image](https://github.com/user-attachments/assets/a42d9af6-0103-446e-a201-c43f7624a632)
+- pros:
+  - Modularity
+  - Easy debugging/updating
+  - No direct access to hardware (Safety)
+  - Abstraction
+- cons:
+  - less efficient
+  - difficult to define layers
+# Microkernel OS
+- Move as much from kernel into **user space**.
+- Communication is provided by **message passing**.
+- ![image](https://github.com/user-attachments/assets/1fd29e5d-0971-4d41-a9c8-de616098d9d2)
+- Easier to extend and port, but it performs more slowly due to communication costs.
+# Modular OS Architecture
+- Most modern OS implement **kernel modules**.
+  - Uses **object-oriented approach**.
+  - Each core **component is separate**.
+  - Communicates via **known interfaces**.
+  - Each is loadable as needed within the kernel.
+- Similar to layers but with more flexible
+- ![image](https://github.com/user-attachments/assets/e9988b67-ed7d-486d-973f-9672e9239325)

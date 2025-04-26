@@ -90,4 +90,22 @@
     - **Load a new binary file** into memory, **destroying the old code**. 
   - *wait()* system call:
     - The parent waits for **one of its child processes** to complete.   
-    
+# Interprocess Communication (IPC)
+- IPC is a set of methods for the exchange of data among multiple threads in one or more processes.
+  - Independent process: cannot be affect or be affected by other processes.
+  - Cooperating process: O.W.
+- Communication methods:
+  - **Shared memory**:
+    - Require more careful **user synchronization**.
+    - Implement by memory access: faster speed.
+    - **Use memory address to access data**.
+  - **Message passing**:
+    - No conflict: **more efficient for small data**.
+    - **Use send/recv message**.
+    - Implemented by **system call**: slower speed.
+  - **Sockets**:
+    - A network connection identified by **IP and port**.
+    - Exchange **unstructured stream or bytes**.
+  - **Remote procedure calls**:
+    - Cause a **procedure** to execute in another address space.
+    - Parameters and return values are passed by message.     

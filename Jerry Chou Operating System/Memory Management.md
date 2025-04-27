@@ -87,4 +87,6 @@
   - Page table: Each entry maps to the **base address of a page** in physical memory.
   - A data structure maintained by OS **for each process**.
     - Page table includes only pages owned by a process.
-    - A process cannot access memory outside its space. 
+    - A process cannot access memory outside its space.
+    - ![image](https://github.com/user-attachments/assets/b215a35e-810d-44a0-a4f0-44e228795060)
+

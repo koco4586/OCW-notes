@@ -44,5 +44,47 @@
 # Swap
 - A process can be swapped out of memory to a **backing store**, and later brought back into memory for continuous execution.
 - Backing store: a chunk of disk, **separated from file system**, to provide direct access to these memory images.
-- 
-# Page segment
+- Swap back memory location:
+  - If binding is done at complie/load time: swap back memory address must be the **same**.
+  - If binding is done at execution time: swap back memory address can be **different**.
+- A process to be swapped must be idle.
+  - Solutions:
+    - Never swap a process with pending I/O.
+    - I/O operations are done through **OS buffers**.
+# Contigous Memory Allocation
+- Fixed-partition allocation:
+  - Each process loads into one partition of fixed-size.
+  - Degree of multi-programming is bounded by the number of partitions.
+- Variable-size partition:
+  - Hole: block of contiguous free memory.
+  - Holes of various size are scattered in memory.
+    - First-Fit: allocate the first hole that fits.
+    - Best-Fit: allocate the smallest hole that fits.
+      - Must search through the whole list, lower speed.
+- Fragmentation:
+  - External fragmentation:
+    - Total free space is big enough to satisfy a request, but is not contigous.
+    - Occur in Variable-size allocation.
+  - Internal fragmentation:
+    - Memory that is internal to a partition but is not being used.
+    - Occur in fixed-partition allocation
+  - Solution: compaction
+    - Shuffle the memory contents to place all free memory together in one large block at **execution time**.
+    - Only if binding is done at execution time.   
+# Non-Contiguous Memory Allocation - Paging
+- Method
+  - Divide **physical memory** into fixed-sized blocks called **frames**.
+  - Divide **logical address space** into blocks of the same size called **pages**.
+  - To run a program of n pages, need to find n free frames and load the program.
+  - **Need to keep tracking the free frames**.
+  - Set up a page table to translate logical to physical addresses.
+- Benefit:
+  - Allow the **physical-address space** of a process to be **noncontiguous**.
+  - Avoid external fragmentation.
+  - Limited internal fragmentation.
+  - Provided **shared memory/pages**.
+- Paging Example:
+  - Page table: Each entry maps to the **base address of a page** in physical memory.
+  - A data structure maintained by OS **for each process**.
+    - Page table includes only pages owned by a process.
+    - A process cannot access memory outside its space. 

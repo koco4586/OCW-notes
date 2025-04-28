@@ -106,4 +106,23 @@
     - Number of bits for page number: $2^{20}$pages = $20$ bits.
     - Number of bits for frame number: $2^{36}/2^{12}$ = $2^{24}$ frames = $24$ bits.
     - Number of bits for page offset: $4KB$ page size = $2^{12}$ bytes = $12$ bits.
-  - 
+  - Page/Frame size:
+    - defined by hardware, a power of 2.
+    - Ranging from 512 bytes to 16 MB/page.
+    - 4KB/8KB is commonly used.
+    - Larger page size = more internal fragmentation but page table is smaller.
+    - Smaller page size = less internal fragmentation but page talbe is larger. 
+- Implementation of page table:
+  - Page table is kept **in memory**.
+  - Page-table base register (PTBR):
+    - The **physical memory address** of the page table.
+    - The PTBR value is stored in PCB.
+    - Changing the value of PTBR during **Context-switch**.
+  - With PTBR, each memory reference results in 2 memory reads: one for the page table and one for the real address.
+    - solution: Translation Look-aside Buffers (TLB), which is implemented by Associative memory.
+    - Associative Memory:
+      - All memory entries can be accessed at the same time (parallel search, $O(1)$), each entry corresponds to an associative register.
+      - Number of entries are limited: typical numer of entries are 64 ~1024.
+  - TLB: A cache for page table shared by all processes.
+    - ![image](https://github.com/user-attachments/assets/5f8466db-7777-4756-a08c-f949797431bd)
+    - TLB must **be flushed** after a context-switch, o.w. TLB entry must have a PID field (address-space identifiers (ASIDs)).

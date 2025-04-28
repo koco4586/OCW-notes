@@ -89,4 +89,21 @@
     - Page table includes only pages owned by a process.
     - A process cannot access memory outside its space.
     - ![image](https://github.com/user-attachments/assets/b215a35e-810d-44a0-a4f0-44e228795060)
-
+- Address Translation scheme
+  - Logical address is divided into two parts:
+    - Page number (p)
+      - used as an index into a page table which contains **base address of each page** in physical memory.
+      - $N$ bits means a process can allocate **at most $2^{N}$ pages**.
+    - Page offset (d)
+      - combined with base address to define the physical memory address that is sent to the memory unit.
+      - $N$ bits means the **page size** is $2^{N}$.
+  - Physical address= page **base address**+ **page **offset.
+  - ![image](https://github.com/user-attachments/assets/1c2b5846-02d0-4f43-8f86-c069dcf99a34)
+  - Given $32$ bits logical address, $36$ bits physical sddress and $4KB$ page size:
+    - Page table size: $2^{32}/2^{12}=2^{20}$ entries.
+    - Max program memory: $2^{32}$ = $4GB$.
+    - Total physical memory size: $2^{36}=64GB$
+    - Number of bits for page number: $2^{20}$pages = $20$ bits.
+    - Number of bits for frame number: $2^{36}/2^{12}$ = $2^{24}$ frames = $24$ bits.
+    - Number of bits for page offset: $4KB$ page size = $2^{12}$ bytes = $12$ bits.
+  - 

@@ -121,8 +121,46 @@
   - With PTBR, each memory reference results in 2 memory reads: one for the page table and one for the real address.
     - solution: Translation Look-aside Buffers (TLB), which is implemented by Associative memory.
     - Associative Memory:
-      - All memory entries can be accessed at the same time (parallel search, $O(1)$), each entry corresponds to an associative register.
+      - All memory entries can be accessed at the same time (parallel search, $O(1)$ ), each entry corresponds to an associative register.
       - Number of entries are limited: typical numer of entries are 64 ~1024.
   - TLB: A cache for page table shared by all processes.
     - ![image](https://github.com/user-attachments/assets/5f8466db-7777-4756-a08c-f949797431bd)
     - TLB must **be flushed** after a context-switch, o.w. TLB entry must have a PID field (address-space identifiers (ASIDs)).
+  - Effective Memory-Access Time (EMAT):
+   - 20 ns for TLB search.
+   - 100 ns for memory access.
+   - EMAT:
+     - 70% TLB hit-ratio:
+       - EMAT = 0.70 x (20+100) + (1-0.70) * (20+100+100) = 150 ns
+     - 98% TLB hit-ratio:
+       - EMAT = 0.98 x (20+100) + (1-0.98) * (20+100+100) = 122 ns
+# Memory Protection
+- Each page is associated a set of **protection bit** (a bit to define read/write/execution permission) in the page table.
+- Common use: **valid-invalid bit**.
+  - Valid: the page/frame is in the process' logical address space, and is thus a legal page.
+  - Invalid: the page/frame is not in the process' logical address space.
+  - Page table length register (PTLR) reduces memory waste.
+- Shared pages:
+  - Paging allows process share common code, which must be reentrant.
+  - **Reentrant code** (pure code):
+    - It never change during execution.
+  - **Only one copy** of the shared code needs to be kept in physical memory.
+  - **Two or several virtual addresses** are mapped to one physical address.
+# Page table Memory Structure
+- Page table could be huge and difficult to be loaded.
+  - $4GB$ $(2^{32})$ logical address with $4KB$ $(2^{12})$ page = 1 million $(2^{20})$ page table entry = $4MB$ total size (assume each entry need 4 bytes (32bits)).
+  - Need to break it into several smaller page tables, better within a single page size, or reduce the total size of page table.
+- Hierarchical Paging:
+  - Break up the logical address space into multiple page tables.
+  - Two-level page table: ![image](https://github.com/user-attachments/assets/1d4f6552-e1b6-442b-a38d-93900d3b0e4e)
+  - Trade-offs: increases memory accesses, not useful for 64-bit address.
+- Hashed Page table:
+  - Commonly-used for address > 32 bits.
+  - Virtual page number is hashed into a hash table.
+  - Each entry in the hashed table contains:
+    - Virtual page number, Frame number, Next pointer.
+    - Pointer waste memory.
+    - Traverse linked list waste time and cause additional memory references.
+  - ![image](https://github.com/user-attachments/assets/89e6d920-c598-4607-81fe-df9c25eea9cb)
+   
+ 

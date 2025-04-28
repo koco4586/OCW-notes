@@ -162,5 +162,58 @@
     - Pointer waste memory.
     - Traverse linked list waste time and cause additional memory references.
   - ![image](https://github.com/user-attachments/assets/89e6d920-c598-4607-81fe-df9c25eea9cb)
+- Inverted Page table:
+  - Maintains **No** page table for each process.    
+  - Maintains a **frame table** for the whole memory.
+  - Each entry in the frame table has PID and Page number.
+  - Reduced the memory needed for page tables but increase memory access time.
+    - Each access needs to **search the whole frame table**.
+    - Solution: use hashing for the frame table. 
+  - Hard to support shared page/memory.
+  - ![image](https://github.com/user-attachments/assets/46fdebd4-ee7d-4fd1-841a-acb47ade134a)
+# Non-Contiguous Memory Allocation - Segmentation
+- Memory-management sheme that supports **user view of memory**.
+- A program is a collection of segments. A segment is a logical unit such as:
+  - main program.
+  - function, object.
+  - local/global variable.
+  - stack, symbol table.
+  - arrays, etc.
+- Segmentation Table:
+  - Logical address: (seg#, offset)
+    - Offset has the SAME length as physical address.
+  - Segmentation table maps two-dimensional physical addresses; each table entry has:
+    - Base (4 Bytes): the start physical address. 
+    - Limit (4 Bytes): the length of the segment.   
+  - Segment-table base register (STBR):
+    - The physical address of the segmentation table.
+  - Segment-table length register (STLR):
+    - The # of segments.
+- Segmentation Hardware: ![image](https://github.com/user-attachments/assets/dd241260-ca07-46e4-a54d-6293ee656113)
+  - Limit register: check offset length.
+  - MMU allocate memory by assigning an appropriate **base address for each segment**.
+    - Physical sddress cannot overlap between segments.
+- Protection bits associated with segments:
+  - Read-only segment.
+  - Read-write segment.
+- Code sharing occurs at segment level, share segment by having same base in two segment tables.  
+# Segmentation with Paging
+- Apply **segmentation** in **logical** address space.
+- Apply **paging** in **physical** address space.
+- Address Translation:
+  - CPU generates logical address
+    - Logical address given to **Segmentation unit produces linear addresses**.
+    - Linear address given to **paging unit, generating physical address** in main memory.
+- Example: The Intel pentium:
+  - Logical-address space is divided into 2 partitions:
+    - $8K (2^{13})$ segments (private), local descriptor table (LDT).
+    - $8K (2^{13})$ segments (shared), blobal descriptor table (GDT).
+  - Logical address:
+    - Max # of segments per process = $16K$.
+    - Size of a segment is less than $2^{32}$ = 4GB
+    - ![image](https://github.com/user-attachments/assets/5a028dc8-c3f2-40a3-a6ac-5dee37394232)
+  - Intel pentium Segmantation: ![image](https://github.com/user-attachments/assets/81377544-3910-4d2c-9e83-50e71e7301b8)
+  - Intel pentium two-level paging: ![image](https://github.com/user-attachments/assets/0331ce2e-621f-4cb3-ac3f-c50fff9277f0)
+  - Whole process: ![image](https://github.com/user-attachments/assets/f6ff4d16-3531-4fcb-91fb-2a9675e210ae)
+
    
- 

@@ -1,0 +1,42 @@
+# Thread Review
+- Lightweight process: basic unit of **CPU utilization**.
+- Treads **belonging to the same process** share:
+  - Code section.
+  - Data section.
+  - OS resources (open files, signals, etc.).
+- Each thread has its own thread control block (TCB)
+  - Thread ID.
+  - Program counter.
+  - Register set.
+  - Stack.
+- ![image](https://github.com/user-attachments/assets/f8462357-2370-4a4f-ae37-49d4e02e0f27)
+# Benefits of Multithreading
+- Responsiveness: allow a process to continue running even if part of it is blocked or is peforming a lengthy operation.
+- Resoure sharing: several different threads of activity all within the **same address space**.
+- Utilization of MP architecture: Several thread may be **running in parallel** on different processors.
+- Economy: Allocating memory and resources for process creation is costly.
+  - Lower creation cost vs. Process: ![image](https://github.com/user-attachments/assets/5bb7bb9a-8a83-4256-a44a-80327e42ef14)
+
+  - Faster inter-process communication vs. MPI: ![image](https://github.com/user-attachments/assets/564c669a-46a9-484e-9dcf-ad7dd5456e05)
+- Challenges in Multicore Programming
+  - Dividing activities: divide program into concurrent tasks.
+  - Data splitting: divide data accessed and manipulated by the tasks.
+  - Data dependency: synchronize data access.
+  - Balance: evenly distribute tasks to cores.
+  - Testing and debugging.
+# User vs. Kernel Threads
+- User threads:
+  - Thread management done by user-level threads library:
+    - POSIX Pthreads.
+    - Win32 threads.
+    - Java threads.
+  - **Thread library** provides support for thread creation, scheduling and deletion.
+  - Generally **fast** to create and manage.
+  - If the kernel is single-threaded, a user-thread blocks = entire process blocks even if other threads are ready to run. 
+- Kernel threads:
+  - Supported by the kernel (OS):
+    - Windows 2000 (NT).
+    - Solaris.
+    - Linux.
+    - Tru64 UNIX.
+-      

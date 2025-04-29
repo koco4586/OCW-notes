@@ -39,4 +39,72 @@
     - Solaris.
     - Linux.
     - Tru64 UNIX.
--      
+  - The **kernel** performs thread creation, scheduling, etc.
+  - Generally **slower** to create and manage.
+  - If a thread is blocked, the kernel can schedule another thread for execution.
+- Multithreading Models:
+  - Many-to-one:
+    - Many user-level threads mapped to a single kernel thread.
+    - Used on systems that do not support kernel threads.
+    - Thread management is **done in user space**, so it is efficient.
+    - Only one thread can access the kernel at a time, multiple threads are unable to run in parallel on multiprocessors. 
+  - One-to-one:
+    - There could be a limit on number of kernel threads.
+    - More concurrency.
+    - Overhead: Creating a thread requires creating the corresponding kernel thread. 
+  - Many-to-many:
+    - Many user-level threads to a smaller or equal number of kernel threads.
+    - **Allows the developer to create as many user threads as wished**.
+    - When a thread performs a blocking call, **the kernel can schedule another thread for execution**.     
+# Shared-Memory Programming
+- Definition: Processes communicationg or work together with each other **through a shared memory space** which can be accessed by all processes.
+- Many issues:
+  - **Synchronization**.
+  - **Deadlock**.
+  - **Cache coherence**.
+- Programming techniques:
+  - Parallel compiler.
+  - Unix processes.
+  - Threads (Pthread, Java).
+- Pthread is the implementation of POSIX(Portable OS Interface) standard for thread.
+  - pthread_create (thread,attr,routine,arg)
+    - thread: An **unique identifier** for the new thread.
+    - attr: It is used to set **thread attributes**. NULL for the default values.
+    - routine: The routine that the thread will execute once it is created.
+    - arg: A **single argument** that may be **passed to routine**.
+  - Example:
+
+    ```c
+    #include <pthread.h>
+    #include <stdio.h>
+    #define NUM_THREADS 5
+
+    void *PrintHello(void *threadId)
+    {
+      long* data = static_cast<long*>(threadId);
+      printf("Hello World! It's me, thread #%ld!\n", *data);
+      pthread_exit(NULL);
+    }
+
+    int main(int argc, char *argv[])
+    {
+      pthread_t threads[NUM_THREADS];
+      for(long tid=0; tid<NUM_THREADS; tid++)
+        {
+        pthread_create(&threads[tid], NULL, PrintHello, (void *)&tid);
+        }
+      /* Last thing that main() should do */
+      pthread_exit(NULL);
+    }
+  - pthread_join(threadid,status)
+    - **Blocks until the specified threadid thread terminates**.
+    - One way to accomplish synchronization between thread.
+  - pthread_detach(threadid)
+    - **Once a thread is detached, it can never be joined**.
+    - Detach a thread could free some system resources.
+- Linux Threads:
+  - Linux does **not** support multithreading.
+  - Various Pthreads implementation are available for **user-level**.
+  - The *fork()* system call: create a new process and a **copy** of the associated data of the parent process.
+  - The *clone()* system call: create a new process and a **link** that points to the associated data of the parent process.
+    - A set of flags is used in the *clone()* call for indication of the level of the sharing.

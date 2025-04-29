@@ -1,0 +1,13 @@
+# Thread Review
+- Lightweight process: basic unit of **CPU utilization**.
+- Treads **belonging to the same process** share:
+  - Code section.
+  - Data section.
+  - OS resources (open files, signals, etc.).
+- Each thread has its own thread control block (TCB)
+  - Thread ID.
+  - Program counter.
+  - Register set.
+  - Stack.
+- 
+#

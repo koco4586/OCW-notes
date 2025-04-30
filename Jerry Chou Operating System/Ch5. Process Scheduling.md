@@ -32,3 +32,35 @@
     - Scheduling time.
     - Interrupt re-enabling time.
     - Context-switch time.      
+# Scheduling Criteria
+- CPU utilization:
+  - Theoretically:0% ~ 100% / real systems: 40% (light) ~ 90% (heavy).
+- Throughput:
+  - Number of completed **processes per time unit**.
+- **Turnaround time**:
+  - Time of submission to completion.
+- **Waiting time**:
+  - Total waiting time in the **ready queue**.
+- **Response time**:
+  - Time of submission to the **first response** is produced.
+# Scheduling algorithms  
+- First-come-first-serve (FCFS) Scheduling:
+  - Example: ![image](https://github.com/user-attachments/assets/d8ad5da0-be2d-49ac-9ba4-ceb9e8d128db)
+- Shortest-Job-First (SJF) Scheduling:
+  - Associate with each process the length of its next CPU burst.
+  - **A process with shortest burst length gets the CPU first** .
+  - **SJF provides the minimum average waiting time**.
+  - Two schemes:
+    - Non-preemptive: once CPU given to a process, it cannot be preempted until its completion.
+      - Example: ![image](https://github.com/user-attachments/assets/3cc22c8b-2a18-4b9f-b25d-fc15faea3ece)
+    - Preemptive: if a new process arrives with shorter burst time length, preemption happens.
+      - Example: ![image](https://github.com/user-attachments/assets/0491171b-9a36-49b1-8e3d-a4b131e866cc)
+- Approximate-Shortest-Job-First Scheduling:
+  - SJF difficulty: **no way to know length of the next CPU burst**.
+  - Approximate SJF: the next burst can be **perdicted** as an exponential average of the measured length of previous CPU bursts.   
+- Priority Scheduling:
+  - A priority number is associated with each process.
+  - **The CPU is allocated to the highest priority process**.
+  - SJF is a priority scheduling where priority is the predicted next CPU burst time.
+  - Problem: starvation (low priority processes never execute).
+  - Solution: aging (as time increases, increase the priority of process).

@@ -98,4 +98,43 @@
   - Each processor is **self-scheduling**.
   - All processes in common ready queue, or each has its own private queue of ready processes.
   - Need **synchronization mechanism**.
--   
+- Processor affinity
+  - Def: A process has an affinity for the processor on which it is currently running.
+    - A process populates its recent used **data in cache memory of its running processor**.
+    - **Cache invalidation and repopulation** has high cost.
+  - Solution:
+    - Soft affinity:
+      - Possible to migrate between processors.
+    - Hard affinity:
+      - Not to migrate to other processor. 
+- Numa and CPU Scheduling
+  - NUMA (non-uniform memory access)
+    - Occurs in systems containing combined CPU and memory boards.
+    - CPU scheduler and memory-placement woks together.
+    - A process can be allocated memory on the board where that CPU resides.
+  - Two strategies for work-load balancing:
+    - **Push migration**: move processes from overloaded to idle or less-busy processor.
+    - **Pull migration**: idle processor pulls a waiting task from a busy processor.
+    - Often implemented in parallel.
+- Multi-core Processor:
+  - Faster and consume less power.
+  - **Memory stall**: When access memory, it spends a significant amount of time waiting for the data become avaiable (e.g. cache miss).
+- Multi-threaded multi-core system:
+  - Two (or more) hardware threads are assigned to each core (Intel Hyper-threading)
+  - Takes advantage of memory stall to make progress on another thread while memory retrive happens.
+- Two ways to multithread a processor:
+  - **Coarse-grained**: **switch** to another thread **when a memory stall occurs**. The cost is high as the instruction pipeline must be flushed.
+  - **Fine-grained**: **switch** between threads at the **boundary of an instruction cycle**. The architecture design includes logic for thread switching, cost is low.
+- Real-time Scheduling:
+  - Soft real-time requirements:
+    - Missing hte deadline is unwanted, but not critical (e.g. multimedia streaming).
+  - Hard real-time requirements:
+    - Missing the deadline results in a **fundamental failure**. (e.g. nuclear power plant controller)
+  - T1 = (0,4,10) = (Ready, Execution, Period (deadline))
+  - Rate-Monotonic (RM) algorithm:
+    - Shorter period = higher priority.
+    - Fixed-priority RTS scheduling algorithm.
+  - Earliest-Deadline-First (EDF) algorithm:
+    - Earlier deadline = higher priority.
+    - Dynamic priority algorithm.
+      

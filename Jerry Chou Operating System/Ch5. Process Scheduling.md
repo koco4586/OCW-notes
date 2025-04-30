@@ -64,3 +64,38 @@
   - SJF is a priority scheduling where priority is the predicted next CPU burst time.
   - Problem: starvation (low priority processes never execute).
   - Solution: aging (as time increases, increase the priority of process).
+- Round-Robin (RR) scheduling:
+  - Each process gets a small unit of CPU time (time quantum (TQ)), usually 10 ~ 100ms.
+  - After TQ elapsed, process is preempted and added **to the end of the ready queue**.
+  - Performance:
+    - TQ large: FIFO.
+    - TQ small: (context-switch) overhead increases.
+  - Smaller response time.
+- Multilevel Queue Scheduling (MLQ):
+  - Ready queue is partitioned into **separate queues**.
+  - Each queue has its own scheduling algorithm.
+  - **Scheduling must be done between queues**.
+    - Fixed priority: possibility of starvation.
+    - Time slice: each queue gets certain amount of CPU time.
+  - Example: ![image](https://github.com/user-attachments/assets/48336a0f-7a54-4e73-8e8f-bec447eb9cf8)
+- Multilevel Feedback Queue Scheduling (MLFQ):
+  - A process can **move between the various queues**; aging can be implemented.
+  - Idea: separate processes according to the characterstic of their CPU burst:
+    - I/O-bound and interactive processes in higher priority queue: short CPU burst.
+    - CPU-bound processes in lower priority queue.
+  - Example: ![image](https://github.com/user-attachments/assets/536e10de-abe4-4a71-a567-3b797c676b00)
+  - In general, MLFQ is defined by the following parameters:
+    - Number of queues.
+    - Scheduling algorithm for each queue.
+    - Method used to determine when to upgrade a process.
+    - Method used to determine when to demote a process.
+# Multi-Processor Scheduling
+- **Asymmetric multiprocessing**
+  - All system activities are handled by a processor.
+  - The others only execute user code.
+  - Far simple than SMP.
+- **Symmetric multiprocessing (SMP)**
+  - Each processor is **self-scheduling**.
+  - All processes in common ready queue, or each has its own private queue of ready processes.
+  - Need **synchronization mechanism**.
+-   

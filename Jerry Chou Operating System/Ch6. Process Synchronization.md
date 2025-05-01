@@ -55,5 +55,112 @@
 
             // reminder section
         } while (1);
+# Pthrea Lock/Mutex Routines
+- To use mutex, it muse be declared as of **type** *pthread_mutex_t* and initialized with *pthread_mutex_init()*.
+- A mutex is destroyed with *pthread_mutex_destroy()*.
+- A critical section can then be protected using *pthread_mutex_lock()* and *pthread_mutex_unlock()*.
+- Example:
 
+  ```c
+  #include "pthread.h"
+  pthread_mutex_t mutex;
+  pthread_mutex_init(&mutex, NULL);    // specify default attribute for the mutex
+  pthread_mutex_lock(&mutex);          // enter critical section
 
+  // Critical Section
+
+  pthread_mutex_unlock(&mutex);        // leave critical section
+  pthread_mutex_destroy(&mutex);
+- Condition Variables (CV)
+  - CV represent some **condition** that a thread can:
+    - Wait on, until the condition occurs.
+    - Notify other waiting threads that the condition has occurred.
+  - Three operations on CV:
+    - *wait()*: **Block** until another thread calls *signal()* or *broadcast()* on the CV.
+    - *signal()*: Wake up **one thread** waiting on the CV. 
+    - *broadcast()*: Wake up **all threads** waiting on the CV.
+  - In pthread, CV type is a **pthread_cond_t**:
+    - Use *pthread_cond_init()* to initialize.
+    - *pthread_cond_wait(&theCV,&somelock)*.       
+    - *pthread_cond_signal(&theCV)*
+    - *pthread_cond_broadcast(&theCV)*
+  - All CV operation **MUST be performed while a mutex is locked**.
+# Hardware Support
+- The CS problem occurs because the modification of a shared variable may be **interrupted**.
+- HW support solution: atomic instructions
+  - Atomic: **as one uninterruptible unit**.   
+  - Examples: *TestAndSet(var)*, *Swap(a,b)*.
+    - *TestAndSet(var)*:
+
+    ```c
+    boolean TestAndSet(boolean &lock)
+    {
+      boolean value = lock;
+      lock = TRUE;
+      return value;
+    }
+    // This function executes atomically:
+    // returns the original value of "lock" and sets "lock" to TRUE
+    ```
+    - $P_{0}$:
+
+      ```c
+      // Shared data:boolean lock; initially lock=False
+      
+
+      do { // P0
+          while (TestAndSet(lock));     // wait until lock is free
+
+          // critical section
+
+          lock = FALSE;                 // release the lock
+
+          // remainder section
+      } while (1);
+      ```
+    - $P_{1}$:
+
+      ```c
+      do { // P1
+          while (TestAndSet(lock));     // obtain lock
+  
+          // critical section
+
+          lock = FALSE;                 // release lock
+
+          // remainder section
+      } while (1);
+
+      ```
+  - *Swap(a,b)*:
+    - $P_{0}$:
+
+      ```c
+      // idea: enter CS if lock == false
+      // Shared data:boolean lock; initially lock=False
+      
+
+      do { // P0
+          key0 = TRUE;
+          while (key0 == TRUE)     
+            Swap(lock,key0);
+          // critical section
+          lock = FALSE;               
+          // remainder section
+      } while (1);
+      ```
+    - $P_{1}$:
+
+      ```c
+      do { // P1
+          key1 = TRUE;
+          while (key1 == TRUE)     
+            Swap(lock,key1);
+          // critical section
+          lock = FALSE;               
+          // remainder section
+      } while (1);
+      ```
+-   
+
+  

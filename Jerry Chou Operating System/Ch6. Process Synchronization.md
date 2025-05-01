@@ -214,3 +214,44 @@
       }
     }
     ```
+# Classical Synchronization Problems
+- Purpose: **used for testing newly proposed synchronization scheme**.
+- Bounded-Buffer (Producer-Consumer) Problem:
+  - A pool of $n$ buffers, each capable of holding one item.
+  - Producer:
+    - Grab an empty buffer.
+    - Place an item into the buffer.
+    - Waits if no empty buffer is available.
+  - Consumer:
+    - Grab a buffer and retracts the item.
+    - Place the buffer back to the free pool.
+    - Waits if all buffers are empty.    
+- Reader-Writers Problem:
+  - A set of shared data objects.
+  - A group of processes:
+    - Reader processes (read share objects).
+    - Writer processes (update shared objects).
+    - **A writer process has exclusive access to a shared object**.
+  - Different variations involving priority
+    - *first RW problem*: no reader will be kept waiting unless a writer is updating a shared object.
+    - *sencond RW problem*: once a writer is ready, it performs the updates as soon as the shared object is released.
+      - Writer has high priority than reader.
+      - Once a writer is ready, no new reader start reading. 
+- Dining-Philosopher Problem:
+  - **5 people** sitting on 5 chairs with **5 chopsticks**.
+  - A person is either thinking or eating.
+    - Thinking: no interaction with the rest 4 people.
+    - Eating: need **2 chopsticks** at hand.
+    - A person **picks up 1 chopstick at a time**.
+    - Done eating: put down both chopsticks.
+  - Deadlock problem
+  - Starvation problem
+  - Figure:![image](https://github.com/user-attachments/assets/45cf86ce-a108-4e89-b915-a025026e23ad)
+# Monitor
+- The representation of a **monitor type** consists of:
+  - Declarations of **variables** whose value define the state of an instance of the type.
+  - **Procedures/functions** that implement operations on the type.
+- The monitor type is similar to a **class in Object-Oriented language**:
+  - A procedure within a monitor can access only **local variables** and the formal **parameters**.
+  - The local variables of a monitor can be used only by the local procedures.
+- The monitor ensures that **only one process at a time can be active within the monitor**.

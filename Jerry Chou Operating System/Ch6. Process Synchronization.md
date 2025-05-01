@@ -169,9 +169,48 @@
 - Accessed only through 2 **atomic** ops: *wait* & *signal*.
 - Semaphore is a part of **POSIX standard** BUT it is **not belonged to Pthread** (it can be used with or without thread).
   - POSIX Semaphore routines:
-    - `sem_init(sem_t *sem, int pshared, unsigned int value)`    (unsigned int value = Initial value of the semaphore)
+    - `sem_init(sem_t *sem, int pshared, unsigned int value)`    (unsigned int value = initial value of the semaphore)
     - `sem_wait(sem_t *sem)`
     - `sem_post(sem_t *sem)`
     - `sem_getvalue(sem_t *sem, int *valptr)`  (int *valptr = current value of the semaphore)
     - `sem_destroy(sem_t *sem)`
+- Semaphore with CS:
+  - 
 
+    ```c
+    void wait(semaphore S)
+    {
+      entry-section();        // Enter critical section
+      S.value--;              // Decrement semaphore value
+      if (S.value < 0)        // If semaphore value is negative,     block the process
+      {
+        add this process to S.L; // Add the process to the semaphore's wait list
+        exit-section();        // Exit critical section
+        sleep();               // Put the process to sleep
+      }
+      else
+      {
+        exit-section();        // Exit critical section
+      }
+    }
+
+    ```
+  - 
+
+    ```c
+    void signal(semaphore S)
+    {
+      entry-section();        // Enter critical section
+      S.value++;              // Increment semaphore value
+      if (S.value <= 0)       // If there are processes waiting
+      {
+        remove a process P from S.L; // Remove a process from the wait list
+        exit-section();        // Exit critical section
+        wakeup(P);             // Wake up the process
+      }
+      else
+      {
+        exit-section();        // Exit critical section
+      }
+    }
+    ```

@@ -56,9 +56,9 @@
             // reminder section
         } while (1);
 # Pthrea Lock/Mutex Routines
-- To use mutex, it muse be declared as of **type** *pthread_mutex_t* and initialized with *pthread_mutex_init()*.
-- A mutex is destroyed with *pthread_mutex_destroy()*.
-- A critical section can then be protected using *pthread_mutex_lock()* and *pthread_mutex_unlock()*.
+- To use mutex, it muse be declared as of **type** `pthread_mutex_t` and initialized with `pthread_mutex_init()`.
+- A mutex is destroyed with `pthread_mutex_destroy()`.
+- A critical section can then be protected using `pthread_mutex_lock()` and `pthread_mutex_unlock()`.
 - Example:
 
   ```c
@@ -76,21 +76,21 @@
     - Wait on, until the condition occurs.
     - Notify other waiting threads that the condition has occurred.
   - Three operations on CV:
-    - *wait()*: **Block** until another thread calls *signal()* or *broadcast()* on the CV.
-    - *signal()*: Wake up **one thread** waiting on the CV. 
-    - *broadcast()*: Wake up **all threads** waiting on the CV.
+    - `wait()`: **Block** until another thread calls `signal()` or `broadcast()` on the CV.
+    - `signal()`: Wake up **one thread** waiting on the CV. 
+    - `broadcast()`: Wake up **all threads** waiting on the CV.
   - In pthread, CV type is a **pthread_cond_t**:
-    - Use *pthread_cond_init()* to initialize.
-    - *pthread_cond_wait(&theCV,&somelock)*.       
-    - *pthread_cond_signal(&theCV)*
-    - *pthread_cond_broadcast(&theCV)*
+    - Use `pthread_cond_init()` to initialize.
+    - `pthread_cond_wait(&theCV,&somelock)`.       
+    - `pthread_cond_signal(&theCV)`.
+    - `pthread_cond_broadcast(&theCV)`.
   - All CV operation **MUST be performed while a mutex is locked**.
 # Hardware Support
 - The CS problem occurs because the modification of a shared variable may be **interrupted**.
 - HW support solution: atomic instructions
   - Atomic: **as one uninterruptible unit**.   
-  - Examples: *TestAndSet(var)*, *Swap(a,b)*.
-    - *TestAndSet(var)*:
+  - Examples: `TestAndSet(var)`, `Swap(a,b)`.
+    - `TestAndSet(var)`:
 
     ```c
     boolean TestAndSet(boolean &lock)
@@ -102,65 +102,76 @@
     // This function executes atomically:
     // returns the original value of "lock" and sets "lock" to TRUE
     ```
-    - $P_{0}$:
+      - $P_{0}$:
 
-      ```c
-      // Shared data:boolean lock; initially lock=False
+        ```c
+        // Shared data:boolean lock; initially lock=False
       
 
-      do { // P0
-          while (TestAndSet(lock));     // wait until lock is free
+        do { // P0
+            while (TestAndSet(lock));     // wait until lock is free
 
-          // critical section
+            // critical section
 
-          lock = FALSE;                 // release the lock
+            lock = FALSE;                 // release the lock
 
-          // remainder section
-      } while (1);
-      ```
-    - $P_{1}$:
-
-      ```c
-      do { // P1
-          while (TestAndSet(lock));     // obtain lock
+            // remainder section
+        } while (1);
+        ```
+      - $P_{1}$:
   
-          // critical section
+        ```c
+        do { // P1
+            while (TestAndSet(lock));     // obtain lock
+  
+            // critical section
 
-          lock = FALSE;                 // release lock
+            lock = FALSE;                 // release lock
 
-          // remainder section
-      } while (1);
+            // remainder section
+        } while (1);
 
-      ```
-  - *Swap(a,b)*:
-    - $P_{0}$:
+        ```
+    - `Swap(a,b)`:
+      - $P_{0}$:
 
-      ```c
-      // idea: enter CS if lock == false
-      // Shared data:boolean lock; initially lock=False
+        ```c
+        // idea: enter CS if lock == false
+        // Shared data:boolean lock; initially lock=False
       
 
-      do { // P0
-          key0 = TRUE;
-          while (key0 == TRUE)     
-            Swap(lock,key0);
-          // critical section
-          lock = FALSE;               
-          // remainder section
-      } while (1);
-      ```
-    - $P_{1}$:
+        do { // P0
+            key0 = TRUE;
+            while (key0 == TRUE)     
+              Swap(lock,key0);
+            // critical section
+            lock = FALSE;               
+            // remainder section
+        } while (1);
+        ```
+      - $P_{1}$:
 
-      ```c
-      do { // P1
-          key1 = TRUE;
-          while (key1 == TRUE)     
-            Swap(lock,key1);
-          // critical section
-          lock = FALSE;               
-          // remainder section
-      } while (1);
-      ```
--   
+        ```c
+        do { // P1
+            key1 = TRUE;
+            while (key1 == TRUE)     
+              Swap(lock,key1);
+            // critical section
+            lock = FALSE;               
+            // remainder section
+        } while (1);
+        ```
+# Semaphore
+- A tool to generalize the synchronization problem (easier to solve, bute noo guarantee for correctness)
+- A record of **how many units** of a particular resource are available
+  - If #record = 1, it is called **binary semaphore** or **mutex lock**.
+  - If #record > 1, it is called **counting semaphore**.
+- Accessed only through 2 **atomic** ops: *wait* & *signal*.
+- Semaphore is a part of **POSIX standard** BUT it is **not belonged to Pthread** (it can be used with or without thread).
+  - POSIX Semaphore routines:
+    - `sem_init(sem_t *sem, int pshared, unsigned int value)`    (unsigned int value = Initial value of the semaphore)
+    - `sem_wait(sem_t *sem)`
+    - `sem_post(sem_t *sem)`
+    - `sem_getvalue(sem_t *sem, int *valptr)`  (int *valptr = current value of the semaphore)
+    - `sem_destroy(sem_t *sem)`
 
-  

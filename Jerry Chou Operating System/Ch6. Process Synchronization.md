@@ -255,3 +255,70 @@
   - A procedure within a monitor can access only **local variables** and the formal **parameters**.
   - The local variables of a monitor can be used only by the local procedures.
 - The monitor ensures that **only one process at a time can be active within the monitor**.
+- Monitor Condition variables:
+  - To allow a process to **wait within** the monitor, a condition variable must be declared as: **condition x,y**;
+  - Condition variable can only be used with the operations `wait()` and `signal()`.
+    - `x.wait();`: means that the process invoking this operation is suspended until another process invokes.
+    - `x.signal();`: resumes exactly one suspended process. If no process is suspended, then the signal operation **has no effect**.
+- Dining Philosophers example:
+  - 
+
+    ```cpp
+    monitor dp
+    {
+    enum {thinking, hungry, eating} state[5]; // current state
+    condition self[5]; // delay eating if can't obtain chopsticks
+    void pickup(int i) //pickup chopsticks
+      {
+      state[i] = hungry;
+      test(i); // try to eat
+      if (state[i] != eating)
+        {
+        self[i].wait(); // wait to eat
+        }
+      }
+    void putdown(int i) //putdown chopsticks
+      {
+      state[i] = thinking;
+      // check if neighbors are waiting to eat
+      test((i + 4) % 5);
+      test((i + 1) % 5);
+      }
+    void test(int i) // try to let Pi eat
+      {
+      if ( (state[(i + 4) % 5] != eating) &&(state[(i + 1) % 5]!= eating)&&(state[i] == hungry) )
+        {
+          // No neighbors are eating and Pi is hungry
+          state[i] = eating;
+          self[i].signal(); // If Pi is suspended, resume it
+        }
+      }
+
+    void init()
+      {
+      for (int i = 0; i < 5; i++)
+        {
+        state[i] = thinking;
+        }
+      }
+    }
+    ```
+# Atomic Transactions
+- Transaction: **A collection of instructions** that performs a **single logic function**.
+- Atomic Transaction: operations happen as a single logical unit of work, in its entirely, or not at all.
+- Atomic Transaction is particular a concern for **database system**.
+- File I/O Example:
+  - Transaction is a series of read and write operations.
+  - Terminated by **commit(transaction successful)** or **abort(transaction failed)**. 
+  - Aborted transaction must be **rolled back** to undo any changes it performed.
+  - **Record** to stable storage information about all **modifications by a tranaction**.
+  - **Write-ahead logging**: Each log record describes **transaction write operation**:
+    - Transaction name.
+    - Data item name.
+    - Old & new values.
+    - Special events: <Ti starts>,<Ti commits>.
+  - Log is used to reconstruct the state of modified by the transactions.
+  - Checkpoints
+    - When failure occurs, must consult the log to **determine which transactions must be re-do**. 
+
+  

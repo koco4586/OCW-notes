@@ -28,7 +28,54 @@
 # Handling Deadlocks
 - Ensure the system will **never enter** a **deadlock state**:
   - Deadlock **prevention**: ensure that **at least one of the 4 necessary conditions** cannot held.
+    - Mutual exclusion (ME): do not require ME on sharable resources.
+      - No need to ensure ME on read-only files.
+      - **Some resources are not shareable** (e.g. printer).
+    - Hold & Wait:
+      - When a process requests a resource, it does not hold any resource.
+      - Pre-allocate all resources before executing.
+      - **Resource utilization is low; starvation is possible**.
+    - No preemption:
+      - When a process is waiting on a resource, all its holding resources are preempted.
+      - Applied to resources whose states can be easily saved and stored later (e.g. CPU registers & memory).
+      - **It cannot easily be applied to some resources** (e.g. printer & tape drives).
+    - Circular wait:
+      - Impose a total ordering of all resources types.
+      - A process requests resources in an increasing order:
+        - Let $R$ = { $R_0, R_1, \dots, R_N$ } be the set of resource types.
+        - **When request $R_k$, should release all $R_i, i\geq k$.**
   - Deadlock **avoidance**: **dynamically** examines the resource aloocation state before allocation.
+    - Avoidance Algorithms:
+      - **Single instance** of a resource type: **RAG algorithm** based on **cycle detection**.
+        - Claim edge: $P_i \rightarrow R_j$, process $P_i$ may **request** $R_j$ **in the future**.
+        - Claim edge converts to request edge if the resource is requested by process, algorithm decides whether the request edge can be safely converted into an assignment edge.
+          - Resources **must be claimed a priori** in the system.
+          - Grant a request only if **NO** cycle is created.
+          - Check for safety using a cycle-detection algorithm ( $O(n^2)$ ).
+      - **Multiple instances** of a resource type: **banker's algorithm** based on safe sequence detection.
+        - Safe state: a system is in a safe state if there exists **a sequence of allocations** to satisfy requests by all processes, this sequence of allocations is called **safe sequence**.
+        - Unsafe state: **possibility** of deadlock, to avoid deadlock is **to ensure the system never enters an unsafe state**.
+        - Banker algorithm:
+          - Use a general safety algorithm to **pre-determine** if any **safe sequence** exists after allocation.
+          - Only proceed the allocation if safe sequence exists.
+            - Safety algorithm:
+              1. Assume processes need **maximum** resources.
+              2. Find a process that can satisfied by free resources.
+              3. Free the resource usage of the process.
+              4. Repeat to step 2 until all processes are satisfied.
+          - Example:
+            - **Total instances:** A: 10, B: 5, C: 7
+            - **Available instances:** A: 3, B: 3, C: 2
+            - Process resources table:
+
+| Process | Max A | Max B | Max C | Alloc A | Alloc B | Alloc C | Need A | Need B | Need C |
+|---------|-------|-------|-------|---------|---------|---------|--------|--------|--------|
+| P0      |   7   |   5   |   3   |    0    |    1    |    0    |   7    |   4    |   3    |
+| P1      |   3   |   2   |   2   |    2    |    0    |    0    |   1    |   2    |   2    |
+| P2      |   9   |   0   |   2   |    3    |    0    |    2    |   6    |   0    |   0    |
+| P3      |   2   |   2   |   2   |    2    |    1    |    1    |   0    |   1    |   1    |
+| P4      |   4   |   3   |   3   |    0    |    0    |    2    |   4    |   3    |   1    |       
+            - Safe sequence: $P_1, P_3, P_4, P_2, P_0$
 - Allow to **enter a deadlock state** and then **recover**:
   - Deadlock detection.
   - Deadlock recovery. 

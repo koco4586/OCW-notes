@@ -1,0 +1,34 @@
+# Deadlock Problem
+- A set of blocked processes each **holding** some resources and **waiting** to acquire a resource held by another process in the set.
+- Necessary conditions (**all four conditions must hold for possible deadlock**):
+  - **Mutual exclusion**: only 1 process at a time can use a resource.
+  - **Hold & Wait**: a process holding some resources and is waiting for another resource.
+  - **No preemption**: a resource can be only released by a process voluntarily.
+  - **Circular wait**: there exists a set $\{ P_0, P_1, \dots, P_n \}$ of waiting processes such that  $P_0 \rightarrow P_1 \rightarrow \dots \rightarrow P_n \rightarrow P_0$.
+- System Model:
+  - Resources types: $R_1, R_2, \dots, R_m$.
+  - Each resource type $R_i$ has **$W_i$ instances**.
+  - Each process utilizes a resource as follows: Request $\rightarrow$ use $\rightarrow$ release.
+  - Resource-Allocation Graph (RAG): ![image](https://github.com/user-attachments/assets/daa13b98-0153-4aec-a730-522d477b90dd)
+    - Vertices (V): **processes** and **resources**.
+    - Edges (E): **request edge** and **assignment edge**. 
+    - Example (cycle with deadlock): ![image](https://github.com/user-attachments/assets/70f67cf8-613d-4b88-b091-fa957b9f2c86)
+      - $P_1$ is waiting for $P_2$.
+      - $P_2$ is waiting for $P_3$ ($P_1$ is also waiting for $P_3$).
+      - Since $P_3$ is waiting for $P_1$ or $P_2$, and both $P_1, P_2$ waiting for $P_3$ $\rightarrow$ **deadlock!**.
+    - Example (cycle without deadlock): ![image](https://github.com/user-attachments/assets/67d36783-1cef-4457-91cb-68080bbff481)
+      - $P_1$ is waiting for $P_2$ or $P_3$.
+      - $P_3$ is waiting for $P_1$ or $P_4$.
+      - Since $P_2$ and $P_4$ wait no one $\rightarrow$ **no deadlock between $P_1$ and $P_3$**.
+- Deadlock Detection:
+  - If RAG contains **no cylce** $\rightarrow$ **no deadlock** since **circular wait** cannot be held.
+  - If RAG contains a **cylce**:
+    - If **one instance per resource type** $\rightarrow$ deadlock.
+    - If **multiple instances per resource type** $\rightarrow$ **possibility** of deadlock.
+# Handling Deadlocks
+- Ensure the system will **never enter** a **deadlock state**:
+  - Deadlock **prevention**: ensure that **at least one of the 4 necessary conditions** cannot held.
+  - Deadlock **avoidance**: **dynamically** examines the resource aloocation state before allocation.
+- Allow to **enter a deadlock state** and then **recover**:
+  - Deadlock detection.
+  - Deadlock recovery. 
